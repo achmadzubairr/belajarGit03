@@ -1,0 +1,32 @@
+Berikut cara yang lebih efisien untuk membuat dan mengelola repositori git melalui command line:
+
+# Langkah 1: Login ke GitHub (hanya perlu sekali)
+gh auth login
+
+# Langkah 1.1: menjadikan folder sebagai git repository
+git init
+
+# Langkah 2: Buat repositori langsung dari folder yang ada
+mkdir project-baru && cd project-baru
+gh repo create nama-repo --public --source=. --remote=origin
+
+# Langkah 3: Buat dan edit file
+echo "# Project Baru" > README.md
+code README.md  # Atau gunakan notepad README.md
+
+# Langkah 4: Commit perubahan
+git add .
+git commit -m "Initial commit"
+
+# Langkah 5: Push ke GitHub
+git push -u origin main
+
+# Perintah tambahan yang berguna:
+# - Buat dan pindah branch baru
+git checkout -b fitur-baru
+
+# - Ubah visibilitas repo
+gh repo edit usernameanda/nama-repo --visibility private
+
+# - Lihat detail repo
+gh repo view --web
