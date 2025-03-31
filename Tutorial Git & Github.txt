@@ -30,3 +30,81 @@ gh repo edit usernameanda/nama-repo --visibility private
 
 # - Lihat detail repo
 gh repo view --web
+
+Flag -u pada perintah git push -u origin main adalah singkatan dari --set-upstream. Fungsinya sangat penting untuk workflow Git yang efisien:
+
+Mengatur tracking branch - Ini membuat branch lokal "main" kamu melacak (track) branch "main" di remote "origin".
+Menyederhanakan perintah di masa depan - Setelah menggunakan -u, kamu bisa melakukan git push dan git pull tanpa perlu menentukan remote dan branch lagi. Git akan "ingat" hubungan ini.
+Integrasi dengan tools - Banyak tool Git dan IDE menggunakan informasi tracking ini untuk menampilkan status sinkronisasi (berapa commit yang belum di-push/pull).
+
+Jadi, alih-alih harus mengetik:
+Copygit push origin main
+Setiap kali, kamu bisa cukup mengetik:
+Copygit push
+Dan Git akan tahu untuk push ke branch "main" di remote "origin" karena kamu sudah mengatur upstream dengan flag -u sebelumnya.
+
+Untuk mengubah default branch dari main menjadi master, kamu dapat mengikuti langkah-langkah berikut:
+
+Untuk repositori lokal yang baru:
+bashCopy# Saat membuat repositori baru
+git init
+git checkout -b master  # Buat dan pindah ke branch master secara langsung
+# Lanjutkan dengan commit dan push biasa
+
+Untuk repositori yang sudah ada:
+bashCopy# Jika branch main sudah ada dan ingin diubah namanya menjadi master
+git branch -m main master  # Rename branch lokal dari main ke master
+git push -u origin master  # Push branch master ke origin
+
+Untuk mengubah default branch di GitHub:
+bashCopy# Menggunakan GitHub CLI
+gh repo edit username/nama-repo --default-branch master
+
+# Atau bisa juga melalui perintah Git
+git push origin -u master  # Push branch master terlebih dahulu
+
+Catatan penting: GitHub dan banyak platform Git sudah menggunakan main sebagai nama default branch. Mengubahnya ke master mungkin tidak sesuai dengan praktik terbaru, tapi tetap bisa dilakukan jika diperlukan untuk kompatibilitas dengan proyek lama.
+
+/ gimana cara edit nama repo github melalui cmd dan menghapus branch yg ada baik di git dan github
+
+Berikut cara mengedit nama repositori GitHub dan menghapus branch melalui command line:
+
+Mengubah nama repositori GitHub melalui CMD
+bash
+# Menggunakan GitHub CLI
+gh repo rename nama-repo-baru
+
+# Jika ingin mengubah nama repo spesifik (bukan yang aktif di direktori saat ini)
+gh repo rename username/nama-repo-lama nama-repo-baru
+Setelah mengubah nama repo di GitHub, kamu perlu memperbarui remote URL di lokal:
+
+bash
+# Cek remote URL saat ini
+git remote -v
+
+# Perbarui remote URL
+git remote set-url origin https://github.com/username/nama-repo-baru.git
+
+Menghapus branch di Git lokal dan GitHub
+bash
+# 1. Menghapus branch lokal (pastikan kamu tidak sedang berada di branch tersebut)
+git checkout main            # Pindah ke branch lain dulu
+git branch -d nama-branch    # Hapus branch lokal (-d = --delete)
+git branch -D nama-branch    # Paksa hapus jika branch belum dimerge (-D = --delete --force)
+
+# 2. Menghapus branch di GitHub/remote
+git push origin --delete nama-branch
+
+# Alternatif menggunakan GitHub CLI
+gh api repos/username/nama-repo/git/refs/heads/nama-branch -X DELETE
+
+Cek branch yang sudah dihapus
+bash
+# Cek branch lokal
+git branch -a
+
+# Bersihkan referensi branch remote yang sudah tidak ada
+git fetch --prune
+Dengan langkah-langkah ini, kamu dapat mengelola nama repositori dan branch-nya sepenuhnya melalui command line.
+
+create by Claude
